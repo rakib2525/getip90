@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reseller Proxy Generator with Country Select</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body {
+            background-color: #0f172a;
+            color: #f1f5f9;
+        }
+        .glass-card {
+            background: rgba(30, 41, 59, 0.7);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        /* Custom scrollbar for dropdown */
+        .custom-scroll::-webkit-scrollbar {
+            width: 5px;
+        }
+        .custom-scroll::-webkit-scrollbar-thumb {
+            background: #475569;
+            border-radius: 10px;
+        }
+    </style>
+</head>
+<body class="min-h-screen flex items-center justify-center p-4">
+
+    <div class="w-full max-w-2xl glass-card rounded-2xl shadow-2xl p-6 md:p-8">
+        <h1 class="text-3xl font-bold text-center mb-8 text-blue-400">Proxy List Generator</h1>
+        
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <!-- Username Input -->
+            <div>
+                <label class="block text-sm font-medium mb-1">Username (Prefix)</label>
+                <input type="text" id="username" placeholder="e.g. 5f7cc772e949def6f31c" 
+                    class="w-full p-2 rounded bg-slate-800 border border-slate-700 focus:border-blue-500 outline-none">
+            </div>
+
+            <!-- Password Input -->
+            <div>
+                <label class="block text-sm font-medium mb-1">Password</label>
+                <input type="text" id="password" placeholder="e.g. 3a0e6db3cf749daf" 
+                    class="w-full p-2 rounded bg-slate-800 border border-slate-700 focus:border-blue-500 outline-none">
+            </div>
+
+            <!-- Country Selection -->
+            <div class="relative">
+                <label class="block text-sm font-medium mb-1">Select Country</label>
+                <select id="countrySelect" onchange="updateCountryCode()"
+                    class="w-full p-2 rounded bg-slate-800 border border-slate-700 focus:border-blue-500 outline-none custom-scroll">
+                    <option value="">-- Select Country --</option>
+                    <!-- Countries will be populated by JS -->
+                </select>
+            </div>
+
+            <!-- Country Code Display/Manual Input -->
+            <div>
+                <label class="block text-sm font-medium mb-1">Country Code (Suffix)</label>
+                <input type="text" id="country" placeholder="e.g. au" 
+                    class="w-full p-2 rounded bg-slate-800 border border-slate-700 focus:border-blue-500 outline-none">
+            </div>
+
+            <!-- Hostname Input -->
+            <div>
+                <label class="block text-sm font-medium mb-1">Hostname</label>
+                <input type="text" id="hostname" value="gw.dataimpulse.com" 
+                    class="w-full p-2 rounded bg-slate-800 border border-slate-700 focus:border-blue-500 outline-none">
+            </div>
+
+            <!-- Port Range Start -->
+            <div>
+                <label class="block text-sm font-medium mb-1">Port Start</label>
+                <input type="number" id="portStart" value="11000" 
+                    class="w-full p-2 rounded bg-slate-800 border border-slate-700 focus:border-blue-500 outline-none">
+            </div>
+        </div>
+
+        <div class="mt-6">
+            <label class="block text-sm font-medium mb-1">How many proxies do you need?</label>
+            <input type="number" id="count" placeholder="Enter quantity" 
+                class="w-full p-2 rounded bg-slate-800 border border-slate-700 focus:border-blue-500 outline-none">
+        </div>
+
+        <button onclick="generateProxies()" 
+            class="w-full mt-8 bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 rounded-lg transition duration-200">
+            Generate Proxy List
+        </button>
+
+        <!-- Output Section -->
+        <div id="outputContainer" class="hidden mt-8">
+            <div class="flex justify-between items-center mb-2">
+                <h2 class="text-xl font-semibold">Generated Proxies:</h2>
+                <button onclick="copyToClipboard()" id="copyBtn" class="text-sm bg-slate-700 px-3 py-1 rounded hover:bg-slate-600 transition-colors">Copy All</button>
+            </div>
+            <textarea id="output" readonly 
+                class="w-full h-64 p-4 rounded bg-slate-900 border border-slate-700 text-sm font-mono text-green-400 focus:outline-none"></textarea>
+        </div>
+    </div>
+
+    <script>
+        // List of common countries (Code and Emoji)
+        const countries = [
+            { name: "United States", code: "us", flag: "🇺🇸" },
+            { name: "United Kingdom", code: "gb", flag: "🇬🇧" },
+            { name: "Australia", code: "au", flag: "🇦🇺" },
+            { name: "Canada", code: "ca", flag: "🇨🇦" },
+            { name: "Germany", code: "de", flag: "🇩🇪" },
+            { name: "France", code: "fr", flag: "🇫🇷" },
+            { name: "India", code: "in", flag: "🇮🇳" },
+            { name: "Bangladesh", code: "bd", flag: "🇧🇩" },
+            { name: "Japan", code: "jp", flag: "🇯🇵" },
+            { name: "China", code: "cn", flag: "🇨🇳" },
+            { name: "Russia", code: "ru", flag: "🇷🇺" },
+            { name: "Brazil", code: "br", flag: "🇧🇷" },
+            { name: "Italy", code: "it", flag: "🇮🇹" },
+            { name: "Spain", code: "es", flag: "🇪🇸" },
+            { name: "Netherlands", code: "nl", flag: "🇳🇱" },
+            { name: "Turkey", code: "tr", flag: "🇹🇷" },
+            { name: "Singapore", code: "sg", flag: "🇸🇬" },
+            { name: "Vietnam", code: "vn", flag: "🇻🇳" },
+            { name: "Thailand", code: "th", flag: "🇹🇭" },
+            { name: "Indonesia", code: "id", flag: "🇮🇩" }
+        ];
+
+        // Populate dropdown on load
+        window.onload = () => {
+            const select = document.getElementById('countrySelect');
+            // Sorting countries alphabetically
+            countries.sort((a, b) => a.name.localeCompare(b.name));
+            
+            countries.forEach(c => {
+                const option = document.createElement('option');
+                option.value = c.code;
+                option.textContent = `${c.flag} ${c.name}`;
+                select.appendChild(option);
+            });
+        };
+
+        function updateCountryCode() {
+            const select = document.getElementById('countrySelect');
+            const countryInput = document.getElementById('country');
+            if (select.value) {
+                countryInput.value = select.value;
+            }
+        }
+
+        function generateProxies() {
+            const user = document.getElementById('username').value.trim();
+            const pass = document.getElementById('password').value.trim();
+            const country = document.getElementById('country').value.trim();
+            const host = document.getElementById('hostname').value.trim();
+            const start = parseInt(document.getElementById('portStart').value);
+            const count = parseInt(document.getElementById('count').value);
+
+            if (!user || !pass || !country || isNaN(count)) {
+                alert("সবগুলো ঘর সঠিকভাবে পূরণ করুন!");
+                return;
+            }
+
+            let results = [];
+            for (let i = 0; i < count; i++) {
+                const currentPort = start + i;
+                // Format: username__cr.country:password@hostname:port
+                const proxy = `${user}__cr.${country}:${pass}@${host}:${currentPort}`;
+                results.push(proxy);
+            }
+
+            const outputTextArea = document.getElementById('output');
+            outputTextArea.value = results.join('\n');
+            document.getElementById('outputContainer').classList.remove('hidden');
+        }
+
+        function copyToClipboard() {
+            const copyText = document.getElementById("output");
+            copyText.select();
+            
+            try {
+                document.execCommand("copy");
+                const btn = document.getElementById("copyBtn");
+                btn.innerText = "Copied!";
+                btn.classList.replace('bg-slate-700', 'bg-green-600');
+                setTimeout(() => {
+                    btn.innerText = "Copy All";
+                    btn.classList.replace('bg-green-600', 'bg-slate-700');
+                }, 2000);
+            } catch (err) {
+                alert("Copy failed!");
+            }
+        }
+    </script>
+</body>
+</html>
