@@ -3,191 +3,321 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Reseller Proxy Generator with Country Select</title>
+    <title>RKB ELITE - Premium Proxy Generator</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
     <style>
+        :root {
+            --primary: #ffffff;
+            --bg: #050505;
+            --card-bg: rgba(20, 20, 20, 0.6);
+        }
         body {
-            background-color: #0f172a;
-            color: #f1f5f9;
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg);
+            color: #fff;
+            overflow-x: hidden;
         }
-        .glass-card {
-            background: rgba(30, 41, 59, 0.7);
-            backdrop-filter: blur(10px);
+
+        /* 3D Animated Background Objects */
+        .bg-glow {
+            position: fixed;
+            width: 40vw;
+            height: 40vw;
+            background: radial-gradient(circle, rgba(255,255,255,0.05) 0%, rgba(0,0,0,0) 70%);
+            border-radius: 50%;
+            z-index: -1;
+            animation: move 20s infinite alternate;
+        }
+        @keyframes move {
+            from { transform: translate(-10%, -10%); }
+            to { transform: translate(20%, 20%); }
+        }
+
+        .glass-container {
+            background: var(--card-bg);
+            backdrop-filter: blur(20px);
             border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+            transition: transform 0.3s ease;
         }
-        /* Custom scrollbar for dropdown */
-        .custom-scroll::-webkit-scrollbar {
-            width: 5px;
+
+        .input-field {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: #fff;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
-        .custom-scroll::-webkit-scrollbar-thumb {
-            background: #475569;
-            border-radius: 10px;
+        .input-field:focus {
+            background: rgba(255, 255, 255, 0.07);
+            border-color: rgba(255, 255, 255, 0.4);
+            box-shadow: 0 0 15px rgba(255, 255, 255, 0.05);
+        }
+
+        .dropdown-list {
+            max-height: 300px;
+            overflow-y: auto;
+            scrollbar-width: thin;
+            scrollbar-color: #333 transparent;
+            animation: fadeIn 0.2s ease-out;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .btn-premium {
+            background: #fff;
+            color: #000;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        .btn-premium:hover {
+            background: #e0e0e0;
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(255, 255, 255, 0.1);
+        }
+
+        .download-btn {
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            color: #fff;
+            transition: all 0.3s ease;
+        }
+        .download-btn:hover {
+            background: rgba(255, 255, 255, 0.1);
+            border-color: #fff;
         }
     </style>
 </head>
-<body class="min-h-screen flex items-center justify-center p-4">
+<body class="min-h-screen flex items-center justify-center p-6">
+    <div class="bg-glow top-0 left-0"></div>
+    <div class="bg-glow bottom-0 right-0" style="animation-delay: -10s;"></div>
 
-    <div class="w-full max-w-2xl glass-card rounded-2xl shadow-2xl p-6 md:p-8">
-        <h1 class="text-3xl font-bold text-center mb-8 text-blue-400">Proxy List Generator</h1>
+    <div class="w-full max-w-2xl glass-container rounded-3xl p-8 md:p-12">
+        <header class="text-center mb-10">
+            <!-- Replaced Name with RKB ELITE -->
+            <h1 class="text-4xl font-black tracking-tighter mb-2 italic">RKB <span class="text-slate-500 text-2xl not-italic font-light">ELITE</span></h1>
+            <p class="text-slate-500 text-sm uppercase tracking-widest">Premium Proxy List Creator</p>
+        </header>
         
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <!-- Username Input -->
-            <div>
-                <label class="block text-sm font-medium mb-1">Username (Prefix)</label>
-                <input type="text" id="username" placeholder="e.g. 5f7cc772e949def6f31c" 
-                    class="w-full p-2 rounded bg-slate-800 border border-slate-700 focus:border-blue-500 outline-none">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <!-- Username -->
+            <div class="space-y-2">
+                <label class="text-xs font-bold text-slate-400 uppercase tracking-wider ml-1">Username Prefix</label>
+                <input type="text" id="username" placeholder="Enter prefix..." 
+                    class="w-full p-4 rounded-2xl input-field outline-none">
             </div>
 
-            <!-- Password Input -->
-            <div>
-                <label class="block text-sm font-medium mb-1">Password</label>
-                <input type="text" id="password" placeholder="e.g. 3a0e6db3cf749daf" 
-                    class="w-full p-2 rounded bg-slate-800 border border-slate-700 focus:border-blue-500 outline-none">
+            <!-- Password -->
+            <div class="space-y-2">
+                <label class="text-xs font-bold text-slate-400 uppercase tracking-wider ml-1">Password</label>
+                <input type="text" id="password" placeholder="Enter password..." 
+                    class="w-full p-4 rounded-2xl input-field outline-none">
             </div>
 
-            <!-- Country Selection -->
-            <div class="relative">
-                <label class="block text-sm font-medium mb-1">Select Country</label>
-                <select id="countrySelect" onchange="updateCountryCode()"
-                    class="w-full p-2 rounded bg-slate-800 border border-slate-700 focus:border-blue-500 outline-none custom-scroll">
-                    <option value="">-- Select Country --</option>
-                    <!-- Countries will be populated by JS -->
-                </select>
+            <!-- Custom Country Selector -->
+            <div class="relative md:col-span-2 space-y-2">
+                <label class="text-xs font-bold text-slate-400 uppercase tracking-wider ml-1">Target Location</label>
+                <div class="relative group">
+                    <div class="absolute inset-y-0 left-4 flex items-center pointer-events-none">
+                        <span id="selectedFlag" class="text-xl">🌍</span>
+                    </div>
+                    <input type="text" id="countrySearch" placeholder="Search for a country..." autocomplete="off"
+                        onclick="toggleDropdown()" oninput="filterCountries()"
+                        class="w-full pl-14 pr-12 py-4 rounded-2xl input-field outline-none cursor-pointer">
+                    <div class="absolute inset-y-0 right-4 flex items-center">
+                        <svg class="w-5 h-5 text-slate-500 group-focus-within:text-white transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                    </div>
+                </div>
+                
+                <!-- Dropdown -->
+                <div id="countryDropdown" class="hidden absolute w-full mt-2 bg-neutral-900 border border-white/10 rounded-2xl shadow-2xl overflow-hidden z-50">
+                    <ul id="countryList" class="dropdown-list">
+                        <!-- Content via JS -->
+                    </ul>
+                </div>
             </div>
 
-            <!-- Country Code Display/Manual Input -->
-            <div>
-                <label class="block text-sm font-medium mb-1">Country Code (Suffix)</label>
-                <input type="text" id="country" placeholder="e.g. au" 
-                    class="w-full p-2 rounded bg-slate-800 border border-slate-700 focus:border-blue-500 outline-none">
-            </div>
-
-            <!-- Hostname Input -->
-            <div>
-                <label class="block text-sm font-medium mb-1">Hostname</label>
-                <input type="text" id="hostname" value="gw.dataimpulse.com" 
-                    class="w-full p-2 rounded bg-slate-800 border border-slate-700 focus:border-blue-500 outline-none">
-            </div>
-
-            <!-- Port Range Start -->
-            <div>
-                <label class="block text-sm font-medium mb-1">Port Start</label>
-                <input type="number" id="portStart" value="11000" 
-                    class="w-full p-2 rounded bg-slate-800 border border-slate-700 focus:border-blue-500 outline-none">
-            </div>
+            <!-- Hidden Params -->
+            <input type="hidden" id="countryCode" value="all">
+            <input type="hidden" id="hostname" value="gw.dataimpulse.com">
+            <input type="hidden" id="portStart" value="11000">
         </div>
 
-        <div class="mt-6">
-            <label class="block text-sm font-medium mb-1">How many proxies do you need?</label>
-            <input type="number" id="count" placeholder="Enter quantity" 
-                class="w-full p-2 rounded bg-slate-800 border border-slate-700 focus:border-blue-500 outline-none">
+        <div class="mt-8 space-y-2">
+            <label class="text-xs font-bold text-slate-400 uppercase tracking-wider ml-1">Quantity</label>
+            <input type="number" id="count" placeholder="e.g. 500" 
+                class="w-full p-4 rounded-2xl input-field outline-none">
         </div>
 
         <button onclick="generateProxies()" 
-            class="w-full mt-8 bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 rounded-lg transition duration-200">
-            Generate Proxy List
+            class="w-full mt-10 p-5 rounded-2xl btn-premium shadow-xl">
+            Generate Proxies
         </button>
 
-        <!-- Output Section -->
-        <div id="outputContainer" class="hidden mt-8">
-            <div class="flex justify-between items-center mb-2">
-                <h2 class="text-xl font-semibold">Generated Proxies:</h2>
-                <button onclick="copyToClipboard()" id="copyBtn" class="text-sm bg-slate-700 px-3 py-1 rounded hover:bg-slate-600 transition-colors">Copy All</button>
+        <!-- Result Section -->
+        <div id="outputContainer" class="hidden mt-12 space-y-4 animate-fadeIn">
+            <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+                <h2 class="text-lg font-bold text-white uppercase tracking-tighter">Results</h2>
+                <div class="flex gap-2 w-full sm:w-auto">
+                    <button onclick="downloadAsTxt()" class="flex-1 sm:flex-none flex items-center justify-center gap-2 px-4 py-2 rounded-xl download-btn text-xs font-bold uppercase">
+                        Download .TXT
+                    </button>
+                    <button onclick="copyToClipboard()" id="copyBtn" class="flex-1 sm:flex-none flex items-center justify-center gap-2 px-4 py-2 rounded-xl bg-white/5 hover:bg-white/10 border border-white/10 text-xs font-bold uppercase transition-all">
+                        Copy All
+                    </button>
+                </div>
             </div>
-            <textarea id="output" readonly 
-                class="w-full h-64 p-4 rounded bg-slate-900 border border-slate-700 text-sm font-mono text-green-400 focus:outline-none"></textarea>
+            <div class="relative">
+                <textarea id="output" readonly 
+                    class="w-full h-80 p-6 rounded-3xl bg-black/40 border border-white/5 text-sm font-mono text-slate-300 focus:outline-none custom-scroll leading-relaxed"></textarea>
+            </div>
         </div>
     </div>
 
     <script>
-        // List of common countries (Code and Emoji)
         const countries = [
-            { name: "United States", code: "us", flag: "🇺🇸" },
-            { name: "United Kingdom", code: "gb", flag: "🇬🇧" },
-            { name: "Australia", code: "au", flag: "🇦🇺" },
-            { name: "Canada", code: "ca", flag: "🇨🇦" },
-            { name: "Germany", code: "de", flag: "🇩🇪" },
-            { name: "France", code: "fr", flag: "🇫🇷" },
-            { name: "India", code: "in", flag: "🇮🇳" },
-            { name: "Bangladesh", code: "bd", flag: "🇧🇩" },
-            { name: "Japan", code: "jp", flag: "🇯🇵" },
-            { name: "China", code: "cn", flag: "🇨🇳" },
-            { name: "Russia", code: "ru", flag: "🇷🇺" },
-            { name: "Brazil", code: "br", flag: "🇧🇷" },
-            { name: "Italy", code: "it", flag: "🇮🇹" },
-            { name: "Spain", code: "es", flag: "🇪🇸" },
-            { name: "Netherlands", code: "nl", flag: "🇳🇱" },
-            { name: "Turkey", code: "tr", flag: "🇹🇷" },
-            { name: "Singapore", code: "sg", flag: "🇸🇬" },
-            { name: "Vietnam", code: "vn", flag: "🇻🇳" },
-            { name: "Thailand", code: "th", flag: "🇹🇭" },
-            { name: "Indonesia", code: "id", flag: "🇮🇩" }
+            { name: "Global mix", code: "all", flag: "🌍" },
+            { name: "Afghanistan", code: "af", flag: "🇦🇫" }, { name: "Albania", code: "al", flag: "🇦🇱" },
+            { name: "Algeria", code: "dz", flag: "🇩🇿" }, { name: "Argentina", code: "ar", flag: "🇦🇷" },
+            { name: "Australia", code: "au", flag: "🇦🇺" }, { name: "Austria", code: "at", flag: "🇦🇹" },
+            { name: "Bangladesh", code: "bd", flag: "🇧🇩" }, { name: "Belgium", code: "be", flag: "🇧🇪" },
+            { name: "Brazil", code: "br", flag: "🇧🇷" }, { name: "Bulgaria", code: "bg", flag: "🇧🇬" },
+            { name: "Canada", code: "ca", flag: "🇨🇦" }, { name: "Chile", code: "cl", flag: "🇨🇱" },
+            { name: "China", code: "cn", flag: "🇨🇳" }, { name: "Colombia", code: "co", flag: "🇨🇴" },
+            { name: "Croatia", code: "hr", flag: "🇭🇷" }, { name: "Cyprus", code: "cy", flag: "🇨🇾" },
+            { name: "Czech Republic", code: "cz", flag: "🇨🇿" }, { name: "Denmark", code: "dk", flag: "🇩🇰" },
+            { name: "Egypt", code: "eg", flag: "🇪🇬" }, { name: "Finland", code: "fi", flag: "🇫🇮" },
+            { name: "France", code: "fr", flag: "🇫🇷" }, { name: "Germany", code: "de", flag: "🇩🇪" },
+            { name: "Greece", code: "gr", flag: "🇬🇷" }, { name: "Hong Kong", code: "hk", flag: "🇭🇰" },
+            { name: "Hungary", code: "hu", flag: "🇭🇺" }, { name: "India", code: "in", flag: "🇮🇳" },
+            { name: "Indonesia", code: "id", flag: "🇮🇩" }, { name: "Ireland", code: "ie", flag: "🇮🇪" },
+            { name: "Israel", code: "il", flag: "🇮🇱" }, { name: "Italy", code: "it", flag: "🇮🇹" },
+            { name: "Japan", code: "jp", flag: "🇯🇵" }, { name: "Kazakhstan", code: "kz", flag: "🇰🇿" },
+            { name: "Kuwait", code: "kw", flag: "🇰🇼" }, { name: "Malaysia", code: "my", flag: "🇲🇾" },
+            { name: "Mexico", code: "mx", flag: "🇲🇽" }, { name: "Netherlands", code: "nl", flag: "🇳🇱" },
+            { name: "New Zealand", code: "nz", flag: "🇳🇿" }, { name: "Norway", code: "no", flag: "🇳🇴" },
+            { name: "Pakistan", code: "pk", flag: "🇵🇰" }, { name: "Peru", code: "pe", flag: "🇵🇪" },
+            { name: "Philippines", code: "ph", flag: "🇵🇭" }, { name: "Poland", code: "pl", flag: "🇵🇱" },
+            { name: "Portugal", code: "pt", flag: "🇵🇹" }, { name: "Romania", code: "ro", flag: "🇷🇴" },
+            { name: "Russia", code: "ru", flag: "🇷🇺" }, { name: "Saudi Arabia", code: "sa", flag: "🇸🇦" },
+            { name: "Singapore", code: "sg", flag: "🇸🇬" }, { name: "South Africa", code: "za", flag: "🇿🇦" },
+            { name: "South Korea", code: "kr", flag: "🇰🇷" }, { name: "Spain", code: "es", flag: "🇪🇸" },
+            { name: "Sweden", code: "se", flag: "🇸🇪" }, { name: "Switzerland", code: "ch", flag: "🇨🇭" },
+            { name: "Taiwan", code: "tw", flag: "🇹🇼" }, { name: "Thailand", code: "th", flag: "🇹🇭" },
+            { name: "Turkey", code: "tr", flag: "🇹🇷" }, { name: "Ukraine", code: "ua", flag: "🇺🇦" },
+            { name: "UAE", code: "ae", flag: "🇦🇪" }, { name: "United Kingdom", code: "gb", flag: "🇬🇧" },
+            { name: "United States", code: "us", flag: "🇺🇸" }, { name: "Vietnam", code: "vn", flag: "🇻🇳" }
         ];
 
-        // Populate dropdown on load
-        window.onload = () => {
-            const select = document.getElementById('countrySelect');
-            // Sorting countries alphabetically
-            countries.sort((a, b) => a.name.localeCompare(b.name));
-            
-            countries.forEach(c => {
-                const option = document.createElement('option');
-                option.value = c.code;
-                option.textContent = `${c.flag} ${c.name}`;
-                select.appendChild(option);
-            });
-        };
+        const dropdown = document.getElementById('countryDropdown');
+        const countryList = document.getElementById('countryList');
+        const countrySearch = document.getElementById('countrySearch');
+        const countryCodeInput = document.getElementById('countryCode');
+        const selectedFlag = document.getElementById('selectedFlag');
 
-        function updateCountryCode() {
-            const select = document.getElementById('countrySelect');
-            const countryInput = document.getElementById('country');
-            if (select.value) {
-                countryInput.value = select.value;
-            }
+        function populateList(data) {
+            countryList.innerHTML = '';
+            data.forEach(c => {
+                const li = document.createElement('li');
+                li.className = "flex items-center justify-between px-6 py-4 hover:bg-white/5 cursor-pointer transition-colors border-b border-white/5 last:border-none";
+                li.innerHTML = `
+                    <div class="flex items-center gap-4">
+                        <span class="text-xl">${c.flag}</span>
+                        <span class="text-slate-200 font-medium">${c.name}</span>
+                    </div>
+                    <span class="text-slate-600 text-[10px] font-bold tracking-widest uppercase">${c.code}</span>
+                `;
+                li.onclick = () => selectCountry(c);
+                countryList.appendChild(li);
+            });
         }
+
+        function toggleDropdown() { dropdown.classList.toggle('hidden'); }
+
+        function selectCountry(country) {
+            countrySearch.value = country.name;
+            countryCodeInput.value = country.code;
+            selectedFlag.innerText = country.flag;
+            dropdown.classList.add('hidden');
+        }
+
+        function filterCountries() {
+            const term = countrySearch.value.toLowerCase();
+            const filtered = countries.filter(c => 
+                c.name.toLowerCase().includes(term) || 
+                c.code.toLowerCase().includes(term)
+            );
+            populateList(filtered);
+            dropdown.classList.remove('hidden');
+        }
+
+        document.addEventListener('click', (e) => {
+            if (!e.target.closest('.relative')) dropdown.classList.add('hidden');
+        });
+
+        window.onload = () => {
+            const global = countries.shift();
+            countries.sort((a, b) => a.name.localeCompare(b.name));
+            countries.unshift(global);
+            populateList(countries);
+            selectCountry(countries[0]);
+        };
 
         function generateProxies() {
             const user = document.getElementById('username').value.trim();
             const pass = document.getElementById('password').value.trim();
-            const country = document.getElementById('country').value.trim();
+            const country = document.getElementById('countryCode').value.trim();
             const host = document.getElementById('hostname').value.trim();
             const start = parseInt(document.getElementById('portStart').value);
             const count = parseInt(document.getElementById('count').value);
 
-            if (!user || !pass || !country || isNaN(count)) {
-                alert("সবগুলো ঘর সঠিকভাবে পূরণ করুন!");
+            if (!user || !pass || isNaN(count)) {
+                alert("পাসওয়ার্ড এবং ইউজারনেম দিতে হবে!");
                 return;
             }
 
             let results = [];
             for (let i = 0; i < count; i++) {
                 const currentPort = start + i;
-                // Format: username__cr.country:password@hostname:port
-                const proxy = `${user}__cr.${country}:${pass}@${host}:${currentPort}`;
-                results.push(proxy);
+                const countryPart = (country === 'all') ? '' : `__cr.${country}`;
+                results.push(`${user}${countryPart}:${pass}@${host}:${currentPort}`);
             }
 
-            const outputTextArea = document.getElementById('output');
-            outputTextArea.value = results.join('\n');
+            document.getElementById('output').value = results.join('\n');
             document.getElementById('outputContainer').classList.remove('hidden');
+            document.getElementById('outputContainer').scrollIntoView({ behavior: 'smooth' });
+        }
+
+        function downloadAsTxt() {
+            const content = document.getElementById('output').value;
+            if (!content) return;
+            const blob = new Blob([content], { type: 'text/plain' });
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            const timestamp = new Date().getTime();
+            a.href = url;
+            a.download = `proxies_${timestamp}.txt`;
+            a.click();
+            window.URL.revokeObjectURL(url);
         }
 
         function copyToClipboard() {
             const copyText = document.getElementById("output");
             copyText.select();
-            
-            try {
-                document.execCommand("copy");
-                const btn = document.getElementById("copyBtn");
-                btn.innerText = "Copied!";
-                btn.classList.replace('bg-slate-700', 'bg-green-600');
-                setTimeout(() => {
-                    btn.innerText = "Copy All";
-                    btn.classList.replace('bg-green-600', 'bg-slate-700');
-                }, 2000);
-            } catch (err) {
-                alert("Copy failed!");
-            }
+            document.execCommand("copy");
+            const btn = document.getElementById("copyBtn");
+            const original = btn.innerText;
+            btn.innerText = "Copied!";
+            btn.style.backgroundColor = "rgba(255,255,255,0.2)";
+            setTimeout(() => {
+                btn.innerText = original;
+                btn.style.backgroundColor = "";
+            }, 2000);
         }
     </script>
 </body>
