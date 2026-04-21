@@ -9,34 +9,54 @@
     <style>
         body {
             font-family: 'Inter', sans-serif;
-            background-color: #f0fdf4; /* Very light green background */
+            background-color: #f0fdf4;
             color: #1a202c;
             margin: 0;
             padding: 0;
+            overflow-x: hidden;
         }
 
-        .container-full {
+        .page-wrapper {
             min-height: 100vh;
             display: flex;
-            align-items: center;
-            justify-content: center;
             padding: 20px;
+            gap: 20px;
+            max-width: 1600px;
+            margin: 0 auto;
         }
 
-        .main-card {
+        /* Responsive stack for mobile */
+        @media (max-width: 1024px) {
+            .page-wrapper {
+                flex-direction: column;
+            }
+            .side-panel {
+                width: 100% !important;
+            }
+        }
+
+        .side-panel {
             background: white;
             border-radius: 24px;
-            box-shadow: 0 10px 40px rgba(22, 101, 52, 0.08); /* Greenish shadow */
+            box-shadow: 0 10px 40px rgba(22, 101, 52, 0.08);
             border: 1px solid #dcfce7;
-            width: 100%;
-            max-width: 900px;
-            padding: 40px;
+            padding: 30px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .left-panel {
+            width: 60%; /* Input side */
+        }
+
+        .right-panel {
+            width: 40%; /* Output side */
         }
 
         .label-text {
             font-size: 14px;
             font-weight: 600;
-            color: #166534; /* Dark green label */
+            color: #166534;
             margin-bottom: 8px;
             display: block;
             margin-left: 4px;
@@ -53,18 +73,17 @@
             font-size: 16px;
         }
         .input-box:focus {
-            border-color: #22c55e; /* Green focus border */
+            border-color: #22c55e;
             outline: none;
             box-shadow: 0 0 0 4px rgba(34, 197, 94, 0.1);
         }
 
-        /* Country Dropdown Style */
         #countryDropdown {
             background: white;
             border: 1px solid #dcfce7;
             border-radius: 12px;
             box-shadow: 0 15px 35px rgba(22, 101, 52, 0.12);
-            max-height: 350px;
+            max-height: 300px;
             overflow-y: auto;
             z-index: 1000;
         }
@@ -75,34 +94,22 @@
             padding: 12px 20px;
             cursor: pointer;
             border-bottom: 1px solid #f0fdf4;
-            transition: background 0.2s;
         }
-        .country-item:hover {
-            background: #f0fdf4;
-        }
-        .country-item .flag { font-size: 22px; margin-right: 15px; }
-        .country-item .name { flex-grow: 1; font-size: 16px; color: #166534; }
-        .country-item .code { font-size: 12px; color: #86efac; font-weight: bold; }
+        .country-item:hover { background: #f0fdf4; }
+        .country-item .flag { font-size: 20px; margin-right: 12px; }
 
         .chip {
             display: inline-flex;
             align-items: center;
             background: #f0fdf4;
             color: #166534;
-            padding: 6px 14px;
-            border-radius: 12px;
-            font-size: 14px;
+            padding: 4px 12px;
+            border-radius: 10px;
+            font-size: 13px;
             font-weight: 600;
-            margin: 4px;
+            margin: 2px;
             border: 1px solid #bbf7d0;
         }
-        .chip button {
-            margin-left: 10px;
-            color: #166534;
-            font-size: 18px;
-            line-height: 1;
-        }
-        .chip button:hover { color: #ef4444; }
 
         .btn-generate {
             background: linear-gradient(135deg, #22c55e 0%, #166534 100%);
@@ -112,7 +119,7 @@
             font-weight: 700;
             font-size: 18px;
             width: 100%;
-            transition: transform 0.2s, box-shadow 0.2s;
+            transition: transform 0.2s;
             margin-top: 10px;
         }
         .btn-generate:hover {
@@ -121,88 +128,105 @@
         }
 
         .output-area {
-            background: #064e3b; /* Deep green output box */
-            color: #6ee7b7; /* Light green text */
+            background: #064e3b;
+            color: #6ee7b7;
             font-family: 'Fira Code', monospace;
             border-radius: 14px;
             padding: 20px;
-            font-size: 14px;
+            font-size: 13px;
             line-height: 1.6;
             border: 1px solid #065f46;
+            flex-grow: 1;
+            resize: none;
         }
 
-        /* Custom Scrollbar for Green Theme */
-        ::-webkit-scrollbar { width: 8px; }
-        ::-webkit-scrollbar-track { background: #f0fdf4; }
+        .placeholder-text {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100%;
+            color: #86efac;
+            text-align: center;
+            border: 2px dashed #dcfce7;
+            border-radius: 14px;
+        }
+
+        ::-webkit-scrollbar { width: 6px; }
         ::-webkit-scrollbar-thumb { background: #86efac; border-radius: 10px; }
-        ::-webkit-scrollbar-thumb:hover { background: #22c55e; }
     </style>
 </head>
 <body>
 
-    <div class="container-full">
-        <div class="main-card">
-            <header class="mb-10 text-center">
-                <h1 class="text-4xl font-extrabold text-gray-900 tracking-tight">RKB ELITE <span class="text-green-600">PRO</span></h1>
-                <p class="text-green-700 text-sm mt-2 font-medium uppercase tracking-widest">Premium Green Engine Proxy Generator</p>
+    <div class="page-wrapper">
+        
+        <!-- Left Side: Generator Tools (Now on the Left) -->
+        <div class="side-panel left-panel">
+            <header class="mb-8 text-left border-b border-green-50 pb-6">
+                <h1 class="text-4xl font-extrabold text-gray-900">RKB ELITE <span class="text-green-600">PRO</span></h1>
+                <p class="text-green-700 text-sm font-medium uppercase tracking-widest mt-1">Multi-Country Engine</p>
             </header>
 
-            <div class="space-y-6">
-                <!-- Auth Details -->
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <div class="space-y-1">
+            <div class="space-y-5">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
                         <label class="label-text">Username</label>
-                        <input type="text" id="username" placeholder="Enter proxy username" class="input-box">
+                        <input type="text" id="username" placeholder="User ID" class="input-box">
                     </div>
-                    <div class="space-y-1">
+                    <div>
                         <label class="label-text">Password</label>
-                        <input type="text" id="password" placeholder="Enter proxy password" class="input-box">
+                        <input type="text" id="password" placeholder="Pass Key" class="input-box">
                     </div>
                 </div>
 
-                <!-- Country Multi-Selector -->
-                <div class="relative space-y-1">
-                    <label class="label-text">Target Geos (Select multiple countries)</label>
-                    <div class="input-box flex flex-wrap gap-2 min-h-[60px] items-center" id="selectorContainer">
+                <div class="relative">
+                    <label class="label-text">Target Geos (Select countries)</label>
+                    <div class="input-box flex flex-wrap gap-2 min-h-[55px] items-center" id="selectorContainer">
                         <div id="selectedChips" class="flex flex-wrap gap-1"></div>
-                        <input type="text" id="countrySearch" placeholder="Search by name or code (e.g. USA, BD)..." autocomplete="off" 
-                            class="flex-grow outline-none text-base bg-transparent min-w-[200px]">
+                        <input type="text" id="countrySearch" placeholder="Type country name..." autocomplete="off" 
+                            class="flex-grow outline-none bg-transparent">
                     </div>
-                    
                     <div id="countryDropdown" class="hidden absolute w-full mt-2">
                         <div id="countryList"></div>
                     </div>
                 </div>
 
-                <!-- Quantity -->
-                <div class="space-y-1">
-                    <label class="label-text">Quantity (Total proxies to generate)</label>
+                <div>
+                    <label class="label-text">Quantity</label>
                     <input type="number" id="count" value="100" class="input-box">
                 </div>
 
-                <!-- Internal Params -->
                 <input type="hidden" id="hostname" value="gw.dataimpulse.com">
 
                 <button onclick="generateProxies()" class="btn-generate">
-                    Generate & Shuffle Mixed Proxies
+                    Start Generation
                 </button>
             </div>
-
-            <!-- Result Area -->
-            <div id="outputContainer" class="hidden mt-10 space-y-4">
-                <div class="flex justify-between items-end px-1">
-                    <div>
-                        <h3 class="text-lg font-bold text-green-900">Generated Proxies</h3>
-                        <p class="text-xs text-green-600">Format: user:pass@host:port</p>
-                    </div>
-                    <div class="flex gap-4">
-                        <button onclick="copyToClipboard()" id="copyBtn" class="bg-green-100 text-green-800 px-4 py-2 rounded-lg text-sm font-bold hover:bg-green-200 transition-colors">Copy All</button>
-                        <button onclick="downloadAsTxt()" class="bg-gray-50 text-gray-600 px-4 py-2 rounded-lg text-sm font-bold hover:bg-gray-100 transition-colors">Download .txt</button>
-                    </div>
-                </div>
-                <textarea id="output" readonly class="w-full h-72 output-area outline-none"></textarea>
-            </div>
         </div>
+
+        <!-- Right Side: Output Area (Now on the Right) -->
+        <div class="side-panel right-panel">
+            <div class="flex justify-between items-center mb-4">
+                <div>
+                    <h3 class="text-xl font-bold text-green-900">Generated Proxies</h3>
+                    <p class="text-xs text-green-600">Total list will appear here</p>
+                </div>
+                <div class="flex gap-2">
+                    <button onclick="copyToClipboard()" id="copyBtn" class="bg-green-100 text-green-800 px-3 py-1.5 rounded-lg text-xs font-bold hover:bg-green-200">Copy</button>
+                    <button onclick="downloadAsTxt()" class="bg-gray-100 text-gray-600 px-3 py-1.5 rounded-lg text-xs font-bold hover:bg-gray-200">Txt</button>
+                </div>
+            </div>
+            
+            <div id="noOutput" class="placeholder-text">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12 mb-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 9l3 3-3 3m5 0h3M5 20h14a2 2 0 002-2V6a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                </svg>
+                <p class="font-medium">No Proxies Generated Yet</p>
+            </div>
+            
+            <textarea id="output" readonly class="hidden output-area outline-none"></textarea>
+        </div>
+
     </div>
 
     <script>
@@ -252,7 +276,6 @@
         ].sort((a,b) => a.n.localeCompare(b.n));
 
         let selectedCountries = [];
-
         const dropdown = document.getElementById('countryDropdown');
         const countryList = document.getElementById('countryList');
         const searchInput = document.getElementById('countrySearch');
@@ -261,15 +284,11 @@
         function renderList(data) {
             countryList.innerHTML = '';
             const available = data.filter(item => !selectedCountries.find(s => s.c === item.c));
-            
             available.forEach(item => {
                 const div = document.createElement('div');
                 div.className = "country-item";
-                div.innerHTML = `<span class="flag">${item.f}</span><span class="name">${item.n}</span><span class="code">${item.c.toUpperCase()}</span>`;
-                div.onclick = (e) => {
-                    e.stopPropagation();
-                    addCountry(item);
-                };
+                div.innerHTML = `<span class="flag">${item.f}</span><span class="name text-sm font-medium text-gray-700">${item.n}</span>`;
+                div.onclick = (e) => { e.stopPropagation(); addCountry(item); };
                 countryList.appendChild(div);
             });
         }
@@ -279,7 +298,6 @@
             searchInput.value = '';
             updateChips();
             dropdown.classList.add('hidden');
-            searchInput.focus();
         }
 
         function removeCountry(code) {
@@ -292,11 +310,9 @@
             selectedCountries.forEach(item => {
                 const chip = document.createElement('div');
                 chip.className = 'chip';
-                chip.innerHTML = `${item.f} ${item.c.toUpperCase()} <button onclick="removeCountry('${item.c}')">&times;</button>`;
+                chip.innerHTML = `${item.f} ${item.c.toUpperCase()} <button class="ml-2 hover:text-red-500" onclick="removeCountry('${item.c}')">&times;</button>`;
                 chipsContainer.appendChild(chip);
             });
-            if(selectedCountries.length > 0) searchInput.placeholder = "";
-            else searchInput.placeholder = "Search by name or code...";
         }
 
         searchInput.addEventListener('input', (e) => {
@@ -312,9 +328,7 @@
         });
 
         document.addEventListener('click', (e) => {
-            if (!document.getElementById('selectorContainer').contains(e.target)) {
-                dropdown.classList.add('hidden');
-            }
+            if (!document.getElementById('selectorContainer').contains(e.target)) dropdown.classList.add('hidden');
         });
 
         function shuffleArray(array) {
@@ -331,48 +345,46 @@
             const count = parseInt(document.getElementById('count').value);
             const host = document.getElementById('hostname').value;
 
-            if (!user || !pass || isNaN(count) || count <= 0) {
-                return;
-            }
+            if (!user || !pass || isNaN(count) || count <= 0) return;
 
             const countryPool = selectedCountries.length > 0 ? selectedCountries.map(sc => sc.c) : ['all'];
-            
             let proxies = [];
 
             for (let i = 0; i < count; i++) {
                 const portSuffix = (i % 99) + 1;
                 const formattedSuffix = portSuffix.toString().padStart(2, '0');
                 const finalPort = "110" + formattedSuffix;
-
                 const randomCountry = countryPool[Math.floor(Math.random() * countryPool.length)];
                 const cSuffix = (randomCountry === 'all') ? '' : `__cr.${randomCountry}`;
                 proxies.push(`${user}${cSuffix}:${pass}@${host}:${finalPort}`);
             }
 
-            const shuffledProxies = shuffleArray(proxies);
-            document.getElementById('output').value = shuffledProxies.join('\n');
-            document.getElementById('outputContainer').classList.remove('hidden');
+            const shuffled = shuffleArray(proxies);
+            const outputArea = document.getElementById('output');
+            const noOutput = document.getElementById('noOutput');
             
-            setTimeout(() => {
-                document.getElementById('outputContainer').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-            }, 100);
+            noOutput.classList.add('hidden');
+            outputArea.classList.remove('hidden');
+            outputArea.value = shuffled.join('\n');
         }
 
         function copyToClipboard() {
             const textarea = document.getElementById('output');
+            if(textarea.classList.contains('hidden')) return;
             textarea.select();
             document.execCommand('copy');
             const btn = document.getElementById('copyBtn');
             btn.innerText = "COPIED ✅";
-            setTimeout(() => btn.innerText = "Copy All", 2000);
+            setTimeout(() => btn.innerText = "Copy", 2000);
         }
 
         function downloadAsTxt() {
             const text = document.getElementById('output').value;
+            if(!text) return;
             const blob = new Blob([text], { type: 'text/plain' });
             const a = document.createElement('a');
             a.href = URL.createObjectURL(blob);
-            a.download = 'RKB_Elite_Proxies_Green.txt';
+            a.download = 'RKB_Elite_Proxies.txt';
             a.click();
         }
     </script>
