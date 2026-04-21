@@ -3,311 +3,368 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>RKB ELITE - Simple Proxy Generator</title>
+    <title>RKB ELITE - Multi Proxy Generator</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
         body {
             font-family: 'Inter', sans-serif;
-            background-color: #f4f7fa;
-            color: #333;
+            background-color: #f0fdf4; /* Very light green background */
+            color: #1a202c;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container-full {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
         }
 
         .main-card {
             background: white;
-            border-radius: 16px;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
-            border: 1px solid #e1e8f0;
+            border-radius: 24px;
+            box-shadow: 0 10px 40px rgba(22, 101, 52, 0.08); /* Greenish shadow */
+            border: 1px solid #dcfce7;
+            width: 100%;
+            max-width: 900px;
+            padding: 40px;
+        }
+
+        .label-text {
+            font-size: 14px;
+            font-weight: 600;
+            color: #166534; /* Dark green label */
+            margin-bottom: 8px;
+            display: block;
+            margin-left: 4px;
         }
 
         .input-box {
             background: #ffffff;
-            border: 1px solid #d1d9e2;
-            border-radius: 10px;
-            padding: 12px 16px;
+            border: 2px solid #e2e8f0;
+            border-radius: 12px;
+            padding: 14px 18px;
             width: 100%;
-            transition: all 0.2s;
-            color: #333;
+            transition: all 0.3s;
+            color: #2d3748;
+            font-size: 16px;
         }
         .input-box:focus {
-            border-color: #3b82f6;
+            border-color: #22c55e; /* Green focus border */
             outline: none;
-            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+            box-shadow: 0 0 0 4px rgba(34, 197, 94, 0.1);
         }
 
         /* Country Dropdown Style */
         #countryDropdown {
             background: white;
-            border: 1px solid #e1e8f0;
-            border-radius: 10px;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
-            max-height: 280px;
+            border: 1px solid #dcfce7;
+            border-radius: 12px;
+            box-shadow: 0 15px 35px rgba(22, 101, 52, 0.12);
+            max-height: 350px;
             overflow-y: auto;
-            z-index: 100;
+            z-index: 1000;
         }
 
         .country-item {
             display: flex;
             align-items: center;
-            padding: 10px 15px;
+            padding: 12px 20px;
             cursor: pointer;
-            border-bottom: 1px solid #f0f4f8;
-        }
-        .country-item:hover {
-            background: #f0f7ff;
-        }
-        .country-item .flag { font-size: 20px; margin-right: 12px; }
-        .country-item .name { flex-grow: 1; font-size: 14px; color: #444; }
-        .country-item .code { color: #888; font-size: 12px; }
-
-        .btn-generate {
-            background: #2563eb;
-            color: white;
-            padding: 14px;
-            border-radius: 10px;
-            font-weight: 600;
-            width: 100%;
+            border-bottom: 1px solid #f0fdf4;
             transition: background 0.2s;
         }
+        .country-item:hover {
+            background: #f0fdf4;
+        }
+        .country-item .flag { font-size: 22px; margin-right: 15px; }
+        .country-item .name { flex-grow: 1; font-size: 16px; color: #166534; }
+        .country-item .code { font-size: 12px; color: #86efac; font-weight: bold; }
+
+        .chip {
+            display: inline-flex;
+            align-items: center;
+            background: #f0fdf4;
+            color: #166534;
+            padding: 6px 14px;
+            border-radius: 12px;
+            font-size: 14px;
+            font-weight: 600;
+            margin: 4px;
+            border: 1px solid #bbf7d0;
+        }
+        .chip button {
+            margin-left: 10px;
+            color: #166534;
+            font-size: 18px;
+            line-height: 1;
+        }
+        .chip button:hover { color: #ef4444; }
+
+        .btn-generate {
+            background: linear-gradient(135deg, #22c55e 0%, #166534 100%);
+            color: white;
+            padding: 18px;
+            border-radius: 14px;
+            font-weight: 700;
+            font-size: 18px;
+            width: 100%;
+            transition: transform 0.2s, box-shadow 0.2s;
+            margin-top: 10px;
+        }
         .btn-generate:hover {
-            background: #1d4ed8;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(34, 197, 94, 0.3);
         }
 
         .output-area {
-            background: #1a1a1a;
-            color: #d1d1d1;
-            font-family: monospace;
-            border-radius: 10px;
-            padding: 15px;
-            font-size: 12px;
-            resize: none;
+            background: #064e3b; /* Deep green output box */
+            color: #6ee7b7; /* Light green text */
+            font-family: 'Fira Code', monospace;
+            border-radius: 14px;
+            padding: 20px;
+            font-size: 14px;
+            line-height: 1.6;
+            border: 1px solid #065f46;
         }
+
+        /* Custom Scrollbar for Green Theme */
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #f0fdf4; }
+        ::-webkit-scrollbar-thumb { background: #86efac; border-radius: 10px; }
+        ::-webkit-scrollbar-thumb:hover { background: #22c55e; }
     </style>
 </head>
-<body class="min-h-screen flex items-center justify-center p-6">
+<body>
 
-    <div class="w-full max-w-xl main-card p-8">
-        <header class="mb-8 text-center">
-            <h1 class="text-2xl font-bold text-gray-800">RKB ELITE <span class="text-blue-600 font-light">PRO</span></h1>
-            <p class="text-gray-500 text-xs mt-1">Simple & Fast Proxy Generator</p>
-        </header>
+    <div class="container-full">
+        <div class="main-card">
+            <header class="mb-10 text-center">
+                <h1 class="text-4xl font-extrabold text-gray-900 tracking-tight">RKB ELITE <span class="text-green-600">PRO</span></h1>
+                <p class="text-green-700 text-sm mt-2 font-medium uppercase tracking-widest">Premium Green Engine Proxy Generator</p>
+            </header>
 
-        <div class="space-y-5">
-            <!-- Auth Details -->
-            <div class="grid grid-cols-2 gap-4">
-                <div class="space-y-1">
-                    <label class="text-xs font-semibold text-gray-600 ml-1">Username</label>
-                    <input type="text" id="username" placeholder="Enter username" class="input-box">
-                </div>
-                <div class="space-y-1">
-                    <label class="text-xs font-semibold text-gray-600 ml-1">Password</label>
-                    <input type="text" id="password" placeholder="Enter password" class="input-box">
-                </div>
-            </div>
-
-            <!-- Country Selector -->
-            <div class="relative space-y-1">
-                <label class="text-xs font-semibold text-gray-600 ml-1">Select Country</label>
-                <div class="relative">
-                    <div class="absolute inset-y-0 left-4 flex items-center pointer-events-none">
-                        <span id="selectedFlag">🌍</span>
+            <div class="space-y-6">
+                <!-- Auth Details -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div class="space-y-1">
+                        <label class="label-text">Username</label>
+                        <input type="text" id="username" placeholder="Enter proxy username" class="input-box">
                     </div>
-                    <input type="text" id="countrySearch" placeholder="Search country..." autocomplete="off"
-                        class="input-box pl-12 cursor-pointer">
+                    <div class="space-y-1">
+                        <label class="label-text">Password</label>
+                        <input type="text" id="password" placeholder="Enter proxy password" class="input-box">
+                    </div>
                 </div>
-                
-                <div id="countryDropdown" class="hidden absolute w-full mt-1">
-                    <div id="countryList"></div>
+
+                <!-- Country Multi-Selector -->
+                <div class="relative space-y-1">
+                    <label class="label-text">Target Geos (Select multiple countries)</label>
+                    <div class="input-box flex flex-wrap gap-2 min-h-[60px] items-center" id="selectorContainer">
+                        <div id="selectedChips" class="flex flex-wrap gap-1"></div>
+                        <input type="text" id="countrySearch" placeholder="Search by name or code (e.g. USA, BD)..." autocomplete="off" 
+                            class="flex-grow outline-none text-base bg-transparent min-w-[200px]">
+                    </div>
+                    
+                    <div id="countryDropdown" class="hidden absolute w-full mt-2">
+                        <div id="countryList"></div>
+                    </div>
                 </div>
+
+                <!-- Quantity -->
+                <div class="space-y-1">
+                    <label class="label-text">Quantity (Total proxies to generate)</label>
+                    <input type="number" id="count" value="100" class="input-box">
+                </div>
+
+                <!-- Internal Params -->
+                <input type="hidden" id="hostname" value="gw.dataimpulse.com">
+
+                <button onclick="generateProxies()" class="btn-generate">
+                    Generate & Shuffle Mixed Proxies
+                </button>
             </div>
 
-            <!-- Quantity -->
-            <div class="space-y-1">
-                <label class="text-xs font-semibold text-gray-600 ml-1">How many proxies?</label>
-                <input type="number" id="count" value="100" class="input-box">
-            </div>
-
-            <!-- Hidden Inputs (For internal use) -->
-            <input type="hidden" id="portStart" value="11000">
-            <input type="hidden" id="countryCode" value="all">
-            <input type="hidden" id="hostname" value="gw.dataimpulse.com">
-
-            <button onclick="generateProxies()" class="btn-generate shadow-sm">
-                Generate Proxies
-            </button>
-        </div>
-
-        <!-- Result Area -->
-        <div id="outputContainer" class="hidden mt-8 space-y-3">
-            <div class="flex justify-between items-center px-1">
-                <span class="text-[10px] font-bold text-gray-400 uppercase tracking-wider">Results</span>
-                <div class="flex gap-3">
-                    <button onclick="copyToClipboard()" id="copyBtn" class="text-xs font-semibold text-blue-600">Copy All</button>
-                    <button onclick="downloadAsTxt()" class="text-xs font-semibold text-gray-500">Download</button>
+            <!-- Result Area -->
+            <div id="outputContainer" class="hidden mt-10 space-y-4">
+                <div class="flex justify-between items-end px-1">
+                    <div>
+                        <h3 class="text-lg font-bold text-green-900">Generated Proxies</h3>
+                        <p class="text-xs text-green-600">Format: user:pass@host:port</p>
+                    </div>
+                    <div class="flex gap-4">
+                        <button onclick="copyToClipboard()" id="copyBtn" class="bg-green-100 text-green-800 px-4 py-2 rounded-lg text-sm font-bold hover:bg-green-200 transition-colors">Copy All</button>
+                        <button onclick="downloadAsTxt()" class="bg-gray-50 text-gray-600 px-4 py-2 rounded-lg text-sm font-bold hover:bg-gray-100 transition-colors">Download .txt</button>
+                    </div>
                 </div>
+                <textarea id="output" readonly class="w-full h-72 output-area outline-none"></textarea>
             </div>
-            <textarea id="output" readonly class="w-full h-52 output-area outline-none border-none"></textarea>
         </div>
     </div>
 
     <script>
         const COUNTRY_DATA = [
-            { n: "Global mix", c: "all", f: "🌍" },
-            { n: "Afghanistan", c: "af", f: "🇦🇫" }, { n: "Aland Islands", c: "ax", f: "🇦🇽" }, { n: "Albania", c: "al", f: "🇦🇱" },
-            { n: "Algeria", c: "dz", f: "🇩🇿" }, { n: "American Samoa", c: "as", f: "🇦🇸" }, { n: "Andorra", c: "ad", f: "🇦🇩" },
-            { n: "Angola", c: "ao", f: "🇦🇴" }, { n: "Anguilla", c: "ai", f: "🇦🇮" }, { n: "Antarctica", c: "aq", f: "🇦🇶" },
-            { n: "Antigua and Barbuda", c: "ag", f: "🇦🇬" }, { n: "Argentina", c: "ar", f: "🇦🇷" }, { n: "Armenia", c: "am", f: "🇦🇲" },
-            { n: "Aruba", c: "aw", f: "🇦🇼" }, { n: "Australia", c: "au", f: "🇦🇺" }, { n: "Austria", c: "at", f: "🇦🇹" },
-            { n: "Azerbaijan", c: "az", f: "🇦🇿" }, { n: "Bahamas", c: "bs", f: "🇧🇸" }, { n: "Bahrain", c: "bh", f: "🇧🇭" },
-            { n: "Bangladesh", c: "bd", f: "🇧🇩" }, { n: "Barbados", c: "bb", f: "🇧🇧" }, { n: "Belarus", c: "by", f: "🇧🇾" },
-            { n: "Belgium", c: "be", f: "🇧🇪" }, { n: "Belize", c: "bz", f: "🇧🇿" }, { n: "Benin", c: "bj", f: "🇧🇯" },
-            { n: "Bermuda", c: "bm", f: "🇧🇲" }, { n: "Bhutan", c: "bt", f: "🇧🇹" }, { n: "Bolivia", c: "bo", f: "🇧🇴" },
-            { n: "Bosnia and Herzegovina", c: "ba", f: "🇧🇦" }, { n: "Botswana", c: "bw", f: "🇧🇼" }, { n: "Brazil", c: "br", f: "🇧🇷" },
-            { n: "British Indian Ocean Territory", c: "io", f: "🇮🇴" }, { n: "Brunei Darussalam", c: "bn", f: "🇧🇳" },
-            { n: "Bulgaria", c: "bg", f: "🇧🇬" }, { n: "Burkina Faso", c: "bf", f: "🇧🇫" }, { n: "Burundi", c: "bi", f: "🇧🇮" },
-            { n: "Cambodia", c: "kh", f: "🇰🇭" }, { n: "Cameroon", c: "cm", f: "🇨🇲" }, { n: "Canada", c: "ca", f: "🇨🇦" },
-            { n: "Cape Verde", c: "cv", f: "🇨🇻" }, { n: "Cayman Islands", c: "ky", f: "🇰🇾" }, { n: "Central African Republic", c: "cf", f: "🇨🇫" },
-            { n: "Chad", c: "td", f: "🇹🇩" }, { n: "Chile", c: "cl", f: "🇨🇱" }, { n: "China", c: "cn", f: "🇨🇳" },
-            { n: "Colombia", c: "co", f: "🇨🇴" }, { n: "Comoros", c: "km", f: "🇰🇲" }, { n: "Congo", c: "cg", f: "🇨🇬" },
-            { n: "Congo, The Democratic Republic of the", c: "cd", f: "🇨🇩" }, { n: "Cook Islands", c: "ck", f: "🇨🇰" },
-            { n: "Costa Rica", c: "cr", f: "🇨🇷" }, { n: "Cote D'Ivoire", c: "ci", f: "🇨🇮" }, { n: "Croatia", c: "hr", f: "🇭🇷" },
-            { n: "Cuba", c: "cu", f: "🇨🇺" }, { n: "Cyprus", c: "cy", f: "🇨🇾" }, { n: "Czech Republic", c: "cz", f: "🇨🇿" },
-            { n: "Denmark", c: "dk", f: "🇩🇰" }, { n: "Djibouti", c: "dj", f: "🇩🇯" }, { n: "Dominica", c: "dm", f: "🇩🇲" },
-            { n: "Dominican Republic", c: "do", f: "🇩🇴" }, { n: "Ecuador", c: "ec", f: "🇪🇨" }, { n: "Egypt", c: "eg", f: "🇪🇬" },
-            { n: "El Salvador", c: "sv", f: "🇸🇻" }, { n: "Equatorial Guinea", c: "gq", f: "🇬🇶" }, { n: "Eritrea", c: "er", f: "🇪🇷" },
-            { n: "Estonia", c: "ee", f: "🇪🇪" }, { n: "Ethiopia", c: "et", f: "🇪🇹" }, { n: "Falkland Islands", c: "fk", f: "🇫🇰" },
-            { n: "Faroe Islands", c: "fo", f: "🇫🇴" }, { n: "Fiji", c: "fj", f: "🇫🇯" }, { n: "Finland", c: "fi", f: "🇫🇮" },
-            { n: "France", c: "fr", f: "🇫🇷" }, { n: "French Guiana", c: "gf", f: "🇬🇫" }, { n: "French Polynesia", c: "pf", f: "🇵🇫" },
-            { n: "Gabon", c: "ga", f: "🇬🇦" }, { n: "Gambia", c: "gm", f: "🇬🇲" }, { n: "Georgia", c: "ge", f: "🇬🇪" },
-            { n: "Germany", c: "de", f: "🇩🇪" }, { n: "Ghana", c: "gh", f: "🇬🇭" }, { n: "Gibraltar", c: "gi", f: "🇬🇮" },
-            { n: "Greece", c: "gr", f: "🇬🇷" }, { n: "Greenland", c: "gl", f: "🇬🇱" }, { n: "Grenada", c: "gd", f: "🇬🇩" },
-            { n: "Guadeloupe", c: "gp", f: "🇬🇵" }, { n: "Guam", c: "gu", f: "🇬🇺" }, { n: "Guatemala", c: "gt", f: "🇬🇹" },
-            { n: "Guernsey", c: "gg", f: "🇬🇬" }, { n: "Guinea", c: "gn", f: "🇬🇳" }, { n: "Guinea-Bissau", c: "gw", f: "🇬🇼" },
-            { n: "Guyana", c: "gy", f: "🇬🇾" }, { n: "Haiti", c: "ht", f: "🇭🇹" }, { n: "Holy See (Vatican City State)", c: "va", f: "🇻🇦" },
-            { n: "Honduras", c: "hn", f: "🇭🇳" }, { n: "Hong Kong", c: "hk", f: "🇭🇰" }, { n: "Hungary", c: "hu", f: "🇭🇺" },
-            { n: "Iceland", c: "is", f: "🇮🇸" }, { n: "India", c: "in", f: "🇮🇳" }, { n: "Indonesia", c: "id", f: "🇮🇩" },
-            { n: "Iran", c: "ir", f: "🇮🇷" }, { n: "Iraq", c: "iq", f: "🇮🇶" }, { n: "Ireland", c: "ie", f: "🇮🇪" },
-            { n: "Isle of Man", c: "im", f: "🇮🇲" }, { n: "Israel", c: "il", f: "🇮🇱" }, { n: "Italy", c: "it", f: "🇮🇹" },
-            { n: "Jamaica", c: "jm", f: "🇯🇲" }, { n: "Japan", c: "jp", f: "🇯🇵" }, { n: "Jersey", c: "je", f: "🇯🇪" },
-            { n: "Jordan", c: "jo", f: "🇯🇴" }, { n: "Kazakhstan", c: "kz", f: "🇰🇿" }, { n: "Kenya", c: "ke", f: "🇰🇪" },
-            { n: "Kiribati", c: "ki", f: "🇰🇮" }, { n: "Korea, Democratic People's Republic of", c: "kp", f: "🇰🇵" },
-            { n: "Korea, Republic of", c: "kr", f: "🇰🇷" }, { n: "Kuwait", c: "kw", f: "🇰🇼" }, { n: "Kyrgyzstan", c: "kg", f: "🇰🇬" },
-            { n: "Lao People's Democratic Republic", c: "la", f: "🇱🇦" }, { n: "Latvia", c: "lv", f: "🇱🇻" },
-            { n: "Lebanon", c: "lb", f: "🇱🇧" }, { n: "Lesotho", c: "ls", f: "🇱🇸" }, { n: "Liberia", c: "lr", f: "🇱🇷" },
-            { n: "Libyan Arab Jamahiriya", c: "ly", f: "🇱🇾" }, { n: "Liechtenstein", c: "li", f: "🇱🇮" },
-            { n: "Lithuania", c: "lt", f: "🇱🇹" }, { n: "Luxembourg", c: "lu", f: "🇱🇺" }, { n: "Macao", c: "mo", f: "🇲🇴" },
-            { n: "Macedonia", c: "mk", f: "🇲🇰" }, { n: "Madagascar", c: "mg", f: "🇲🇬" }, { n: "Malawi", c: "mw", f: "🇲🇼" },
-            { n: "Malaysia", c: "my", f: "🇲🇾" }, { n: "Maldives", c: "mv", f: "🇲🇻" }, { n: "Mali", c: "ml", f: "🇲🇱" },
-            { n: "Malta", c: "mt", f: "🇲🇹" }, { n: "Marshall Islands", c: "mh", f: "🇲🇭" }, { n: "Martinique", c: "mq", f: "🇲🇶" },
-            { n: "Mauritania", c: "mr", f: "🇲🇷" }, { n: "Mauritius", c: "mu", f: "🇲🇺" }, { n: "Mayotte", c: "yt", f: "🇾🇹" },
-            { n: "Mexico", c: "mx", f: "🇲🇽" }, { n: "Micronesia", c: "fm", f: "🇫🇲" }, { n: "Moldova", c: "md", f: "🇲🇩" },
-            { n: "Monaco", c: "mc", f: "🇲🇨" }, { n: "Mongolia", c: "mn", f: "🇲🇳" }, { n: "Montenegro", c: "me", f: "🇲🇪" },
-            { n: "Montserrat", c: "ms", f: "🇲🇸" }, { n: "Morocco", c: "ma", f: "🇲🇦" }, { n: "Mozambique", c: "mz", f: "🇲🇿" },
-            { n: "Myanmar", c: "mm", f: "🇲🇲" }, { n: "Namibia", c: "na", f: "🇳🇦" }, { n: "Nauru", c: "nr", f: "🇳🇷" },
-            { n: "Nepal", c: "np", f: "🇳🇵" }, { n: "Netherlands", c: "nl", f: "🇳🇱" }, { n: "New Caledonia", c: "nc", f: "🇳🇨" },
-            { n: "New Zealand", c: "nz", f: "🇳🇿" }, { n: "Nicaragua", c: "ni", f: "🇳🇮" }, { n: "Niger", c: "ne", f: "🇳🇪" },
-            { n: "Nigeria", c: "ng", f: "🇳🇬" }, { n: "Niue", c: "nu", f: "🇳🇺" }, { n: "Norfolk Island", c: "nf", f: "🇳🇫" },
-            { n: "Northern Mariana Islands", c: "mp", f: "🇲🇵" }, { n: "Norway", c: "no", f: "🇳🇴" }, { n: "Oman", c: "om", f: "🇴🇲" },
-            { n: "Pakistan", c: "pk", f: "🇵🇰" }, { n: "Palau", c: "pw", f: "🇵🇼" }, { n: "Palestinian Territory", c: "ps", f: "🇵🇸" },
-            { n: "Panama", c: "pa", f: "🇵🇦" }, { n: "Papua New Guinea", c: "pg", f: "🇵🇬" }, { n: "Paraguay", c: "py", f: "🇵🇾" },
-            { n: "Peru", c: "pe", f: "🇵🇪" }, { n: "Philippines", c: "ph", f: "🇵🇭" }, { n: "Pitcairn", c: "pn", f: "🇵🇳" },
-            { n: "Poland", c: "pl", f: "🇵🇱" }, { n: "Portugal", c: "pt", f: "🇵🇹" }, { n: "Puerto Rico", c: "pr", f: "🇵🇷" },
-            { n: "Qatar", c: "qa", f: "🇶🇦" }, { n: "Reunion", c: "re", f: "🇷🇪" }, { n: "Romania", c: "ro", f: "🇷🇴" },
-            { n: "Russian Federation", c: "ru", f: "🇷🇺" }, { n: "Rwanda", c: "rw", f: "🇷🇼" }, { n: "Saint Helena", c: "sh", f: "🇸🇭" },
-            { n: "Saint Kitts and Nevis", c: "kn", f: "🇰🇳" }, { n: "Saint Lucia", c: "lc", f: "🇱🇨" }, { n: "Saint Pierre and Miquelon", c: "pm", f: "🇵🇲" },
-            { n: "Saint Vincent and the Grenadines", c: "vc", f: "🇻🇨" }, { n: "Samoa", c: "ws", f: "🇼🇸" },
-            { n: "San Marino", c: "sm", f: "🇸🇲" }, { n: "Sao Tome and Principe", c: "st", f: "🇸🇹" }, { n: "Saudi Arabia", c: "sa", f: "🇸🇦" },
-            { n: "Senegal", c: "sn", f: "🇸🇳" }, { n: "Serbia", c: "rs", f: "🇷🇸" }, { n: "Seychelles", c: "sc", f: "🇸🇨" },
-            { n: "Sierra Leone", c: "sl", f: "🇸🇱" }, { n: "Singapore", c: "sg", f: "🇸🇬" }, { n: "Slovakia", c: "sk", f: "🇸🇰" },
-            { n: "Slovenia", c: "si", f: "🇸🇮" }, { n: "Solomon Islands", c: "sb", f: "🇸🇧" }, { n: "Somalia", c: "so", f: "🇸🇴" },
-            { n: "South Africa", c: "za", f: "🇿🇦" }, { n: "South Georgia", c: "gs", f: "🇬🇸" }, { n: "Spain", c: "es", f: "🇪🇸" },
-            { n: "Sri Lanka", c: "lk", f: "🇱🇰" }, { n: "Sudan", c: "sd", f: "🇸🇩" }, { n: "Suriname", c: "sr", f: "🇸🇷" },
-            { n: "Svalbard and Jan Mayen", c: "sj", f: "🇸🇯" }, { n: "Swaziland", c: "sz", f: "🇸🇿" }, { n: "Sweden", c: "se", f: "🇸🇪" },
-            { n: "Switzerland", c: "ch", f: "🇨🇭" }, { n: "Syrian Arab Republic", c: "sy", f: "🇸🇾" }, { n: "Taiwan", c: "tw", f: "🇹🇼" },
-            { n: "Tajikistan", c: "tj", f: "🇹🇯" }, { n: "Tanzania", c: "tz", f: "🇹🇿" }, { n: "Thailand", c: "th", f: "🇹🇭" },
-            { n: "Timor-Leste", c: "tl", f: "🇹🇱" }, { n: "Togo", c: "tg", f: "🇹🇬" }, { n: "Tokelau", c: "tk", f: "🇹🇰" },
-            { n: "Tonga", c: "to", f: "🇹🇴" }, { n: "Trinidad and Tobago", c: "tt", f: "🇹🇹" }, { n: "Tunisia", c: "tn", f: "🇹🇳" },
-            { n: "Turkey", c: "tr", f: "🇹🇷" }, { n: "Turkmenistan", c: "tm", f: "🇹🇲" }, { n: "Turks and Caicos Islands", c: "tc", f: "🇹🇨" },
-            { n: "Tuvalu", c: "tv", f: "🇹🇻" }, { n: "Uganda", c: "ug", f: "🇺🇬" }, { n: "Ukraine", c: "ua", f: "🇺🇦" },
-            { n: "United Arab Emirates", c: "ae", f: "🇦🇪" }, { n: "United Kingdom", c: "gb", f: "🇬🇧" },
-            { n: "United States", c: "us", f: "🇺🇸" }, { n: "United States Minor Outlying Islands", c: "um", f: "🇺🇲" },
-            { n: "Uruguay", c: "uy", f: "🇺🇾" }, { n: "Uzbekistan", c: "uz", f: "🇺🇿" }, { n: "Vanuatu", c: "vu", f: "🇻🇺" },
-            { n: "Venezuela", c: "ve", f: "🇻🇪" }, { n: "Vietnam", c: "vn", f: "🇻🇳" }, { n: "Virgin Islands, British", c: "vg", f: "🇻🇬" },
-            { n: "Virgin Islands, U.S.", c: "vi", f: "🇻🇮" }, { n: "Wallis and Futuna", c: "wf", f: "🇼🇫" },
-            { n: "Western Sahara", c: "eh", f: "🇪🇭" }, { n: "Yemen", c: "ye", f: "🇾🇪" }, { n: "Zambia", c: "zm", f: "🇿🇲" },
-            { n: "Zimbabwe", c: "zw", f: "🇿🇼" }
-        ];
+            { n: "United States", c: "us", f: "🇺🇸" }, { n: "United Kingdom", c: "gb", f: "🇬🇧" },
+            { n: "Canada", c: "ca", f: "🇨🇦" }, { n: "Australia", c: "au", f: "🇦🇺" },
+            { n: "Germany", c: "de", f: "🇩🇪" }, { n: "France", c: "fr", f: "🇫🇷" },
+            { n: "Bangladesh", c: "bd", f: "🇧🇩" }, { n: "India", c: "in", f: "🇮🇳" },
+            { n: "Japan", c: "jp", f: "🇯🇵" }, { n: "Singapore", c: "sg", f: "🇸🇬" },
+            { n: "Netherlands", c: "nl", f: "🇳🇱" }, { n: "Brazil", c: "br", f: "🇧🇷" },
+            { n: "Italy", c: "it", f: "🇮🇹" }, { n: "Spain", c: "es", f: "🇪🇸" },
+            { n: "Russia", c: "ru", f: "🇷🇺" }, { n: "Turkey", c: "tr", f: "🇹🇷" },
+            { n: "South Korea", c: "kr", f: "🇰🇷" }, { n: "China", c: "cn", f: "🇨🇳" },
+            { n: "Vietnam", c: "vn", f: "🇻🇳" }, { n: "Thailand", c: "th", f: "🇹🇭" },
+            { n: "Indonesia", c: "id", f: "🇮🇩" }, { n: "Malaysia", c: "my", f: "🇲🇾" },
+            { n: "Pakistan", c: "pk", f: "🇵🇰" }, { n: "Ukraine", c: "ua", f: "🇺🇦" },
+            { n: "Poland", c: "pl", f: "🇵🇱" }, { n: "Sweden", c: "se", f: "🇸🇪" },
+            { n: "Norway", c: "no", f: "🇳🇴" }, { n: "Denmark", c: "dk", f: "🇩🇰" },
+            { n: "Finland", c: "fi", f: "🇫🇮" }, { n: "Switzerland", c: "ch", f: "🇨🇭" },
+            { n: "Austria", c: "at", f: "🇦🇹" }, { n: "Belgium", c: "be", f: "🇧🇪" },
+            { n: "Portugal", c: "pt", f: "🇵🇹" }, { n: "Greece", c: "gr", f: "🇬🇷" },
+            { n: "Israel", c: "il", f: "🇮🇱" }, { n: "UAE", c: "ae", f: "🇦🇪" },
+            { n: "Saudi Arabia", c: "sa", f: "🇸🇦" }, { n: "South Africa", c: "za", f: "🇿🇦" },
+            { n: "Mexico", c: "mx", f: "🇲🇽" }, { n: "Argentina", c: "ar", f: "🇦🇷" },
+            { n: "Colombia", c: "co", f: "🇨🇴" }, { n: "Chile", c: "cl", f: "🇨🇱" },
+            { n: "Egypt", c: "eg", f: "🇪🇬" }, { n: "Nigeria", c: "ng", f: "🇳🇬" },
+            { n: "Kenya", c: "ke", f: "🇰🇪" }, { n: "Philippines", c: "ph", f: "🇵🇭" },
+            { n: "Hong Kong", c: "hk", f: "🇭🇰" }, { n: "Taiwan", c: "tw", f: "🇹🇼" },
+            { n: "Ireland", c: "ie", f: "🇮🇪" }, { n: "New Zealand", c: "nz", f: "🇳🇿" },
+            { n: "Czech Republic", c: "cz", f: "🇨🇿" }, { n: "Hungary", c: "hu", f: "🇭🇺" },
+            { n: "Romania", c: "ro", f: "🇷🇴" }, { n: "Bulgaria", c: "bg", f: "🇧🇬" },
+            { n: "Croatia", c: "hr", f: "🇭🇷" }, { n: "Slovakia", c: "sk", f: "🇸🇰" },
+            { n: "Slovenia", c: "si", f: "🇸🇮" }, { n: "Estonia", c: "ee", f: "🇪🇪" },
+            { n: "Latvia", c: "lv", f: "🇱🇻" }, { n: "Lithuania", c: "lt", f: "🇱🇹" },
+            { n: "Luxembourg", c: "lu", f: "🇱🇺" }, { n: "Malta", c: "mt", f: "🇲🇹" },
+            { n: "Cyprus", c: "cy", f: "🇨🇾" }, { n: "Iceland", c: "is", f: "🇮🇸" },
+            { n: "Morocco", c: "ma", f: "🇲🇦" }, { n: "Algeria", c: "dz", f: "🇩🇿" },
+            { n: "Tunisia", c: "tn", f: "🇹🇳" }, { n: "Peru", c: "pe", f: "🇵🇪" },
+            { n: "Ecuador", c: "ec", f: "🇪🇨" }, { n: "Uruguay", c: "uy", f: "🇺🇾" },
+            { n: "Paraguay", c: "py", f: "🇵🇾" }, { n: "Bolivia", c: "bo", f: "🇧🇴" },
+            { n: "Kazakhstan", c: "kz", f: "🇰🇿" }, { n: "Uzbekistan", c: "uz", f: "🇺🇿" },
+            { n: "Qatar", c: "qa", f: "🇶🇦" }, { n: "Kuwait", c: "kw", f: "🇰🇼" },
+            { n: "Oman", c: "om", f: "🇴🇲" }, { n: "Jordan", c: "jo", f: "🇯🇴" },
+            { n: "Lebanon", c: "lb", f: "🇱🇧" }, { n: "Sri Lanka", c: "lk", f: "🇱🇰" },
+            { n: "Nepal", c: "np", f: "🇳🇵" }, { n: "Myanmar", c: "mm", f: "🇲🇲" },
+            { n: "Cambodia", c: "kh", f: "🇰🇭" }, { n: "Laos", c: "la", f: "🇱🇦" }
+        ].sort((a,b) => a.n.localeCompare(b.n));
+
+        let selectedCountries = [];
 
         const dropdown = document.getElementById('countryDropdown');
         const countryList = document.getElementById('countryList');
         const searchInput = document.getElementById('countrySearch');
+        const chipsContainer = document.getElementById('selectedChips');
 
         function renderList(data) {
             countryList.innerHTML = '';
-            data.forEach(item => {
+            const available = data.filter(item => !selectedCountries.find(s => s.c === item.c));
+            
+            available.forEach(item => {
                 const div = document.createElement('div');
                 div.className = "country-item";
-                div.innerHTML = `
-                    <span class="flag">${item.f}</span>
-                    <span class="name">${item.n}</span>
-                    <span class="code">(${item.c.toUpperCase()})</span>
-                `;
-                div.onclick = () => selectCountry(item);
+                div.innerHTML = `<span class="flag">${item.f}</span><span class="name">${item.n}</span><span class="code">${item.c.toUpperCase()}</span>`;
+                div.onclick = (e) => {
+                    e.stopPropagation();
+                    addCountry(item);
+                };
                 countryList.appendChild(div);
             });
         }
 
-        function selectCountry(item) {
-            searchInput.value = item.n;
-            document.getElementById('countryCode').value = item.c;
-            document.getElementById('selectedFlag').innerText = item.f;
+        function addCountry(item) {
+            selectedCountries.push(item);
+            searchInput.value = '';
+            updateChips();
             dropdown.classList.add('hidden');
+            searchInput.focus();
+        }
+
+        function removeCountry(code) {
+            selectedCountries = selectedCountries.filter(c => c.c !== code);
+            updateChips();
+        }
+
+        function updateChips() {
+            chipsContainer.innerHTML = '';
+            selectedCountries.forEach(item => {
+                const chip = document.createElement('div');
+                chip.className = 'chip';
+                chip.innerHTML = `${item.f} ${item.c.toUpperCase()} <button onclick="removeCountry('${item.c}')">&times;</button>`;
+                chipsContainer.appendChild(chip);
+            });
+            if(selectedCountries.length > 0) searchInput.placeholder = "";
+            else searchInput.placeholder = "Search by name or code...";
         }
 
         searchInput.addEventListener('input', (e) => {
             const term = e.target.value.toLowerCase();
-            const filtered = COUNTRY_DATA.filter(i => 
-                i.n.toLowerCase().includes(term) || 
-                i.c.toLowerCase().includes(term)
-            );
+            const filtered = COUNTRY_DATA.filter(i => i.n.toLowerCase().includes(term) || i.c.toLowerCase().includes(term));
             renderList(filtered);
             dropdown.classList.remove('hidden');
         });
 
-        searchInput.addEventListener('click', (e) => {
-            e.stopPropagation();
-            dropdown.classList.toggle('hidden');
+        searchInput.addEventListener('focus', () => {
             renderList(COUNTRY_DATA);
+            dropdown.classList.remove('hidden');
         });
 
-        document.addEventListener('click', () => dropdown.classList.add('hidden'));
+        document.addEventListener('click', (e) => {
+            if (!document.getElementById('selectorContainer').contains(e.target)) {
+                dropdown.classList.add('hidden');
+            }
+        });
+
+        function shuffleArray(array) {
+            for (let i = array.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [array[i], array[j]] = [array[j], array[i]];
+            }
+            return array;
+        }
 
         function generateProxies() {
             const user = document.getElementById('username').value.trim();
             const pass = document.getElementById('password').value.trim();
-            const country = document.getElementById('countryCode').value;
             const count = parseInt(document.getElementById('count').value);
-            const portStart = parseInt(document.getElementById('portStart').value);
             const host = document.getElementById('hostname').value;
 
-            if (!user || !pass || !count) return;
-
-            let proxies = [];
-            for (let i = 0; i < count; i++) {
-                const port = portStart + i;
-                const cSuffix = (country === 'all') ? '' : `__cr.${country}`;
-                proxies.push(`${user}${cSuffix}:${pass}@${host}:${port}`);
+            if (!user || !pass || isNaN(count) || count <= 0) {
+                return;
             }
-            document.getElementById('output').value = proxies.join('\n');
+
+            const countryPool = selectedCountries.length > 0 ? selectedCountries.map(sc => sc.c) : ['all'];
+            
+            let proxies = [];
+
+            for (let i = 0; i < count; i++) {
+                const portSuffix = (i % 99) + 1;
+                const formattedSuffix = portSuffix.toString().padStart(2, '0');
+                const finalPort = "110" + formattedSuffix;
+
+                const randomCountry = countryPool[Math.floor(Math.random() * countryPool.length)];
+                const cSuffix = (randomCountry === 'all') ? '' : `__cr.${randomCountry}`;
+                proxies.push(`${user}${cSuffix}:${pass}@${host}:${finalPort}`);
+            }
+
+            const shuffledProxies = shuffleArray(proxies);
+            document.getElementById('output').value = shuffledProxies.join('\n');
             document.getElementById('outputContainer').classList.remove('hidden');
+            
+            setTimeout(() => {
+                document.getElementById('outputContainer').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+            }, 100);
         }
 
         function copyToClipboard() {
             const textarea = document.getElementById('output');
             textarea.select();
             document.execCommand('copy');
-            document.getElementById('copyBtn').innerText = "Copied!";
-            setTimeout(() => document.getElementById('copyBtn').innerText = "Copy All", 2000);
+            const btn = document.getElementById('copyBtn');
+            btn.innerText = "COPIED ✅";
+            setTimeout(() => btn.innerText = "Copy All", 2000);
         }
 
         function downloadAsTxt() {
@@ -315,11 +372,9 @@
             const blob = new Blob([text], { type: 'text/plain' });
             const a = document.createElement('a');
             a.href = URL.createObjectURL(blob);
-            a.download = 'proxies.txt';
+            a.download = 'RKB_Elite_Proxies_Green.txt';
             a.click();
         }
-
-        window.onload = () => renderList(COUNTRY_DATA);
     </script>
 </body>
 </html>
